@@ -1,24 +1,17 @@
 package main
 
 import (
+	"context"
 	"fmt"
-	"net/http"
 
-	"github.com/go-chi/chi/v5"
-	"github.com/go-chi/chi/v5/middleware"
+	"github.com/muhafs/orders-api/application"
 )
 
 func main() {
-	r := chi.NewRouter()
-	r.Use(middleware.Logger)
-	r.Get("/", basicHandler)
+	app := application.New()
 
-	fmt.Println("server running at localhost:3000")
-	if err := http.ListenAndServe(":3000", r); err != nil {
-		fmt.Println("failed to run server:\n", err)
+	err := app.Start(context.TODO())
+	if err != nil {
+		fmt.Println("failed to start app:", err)
 	}
-}
-
-func basicHandler(w http.ResponseWriter, r *http.Request) {
-	w.Write([]byte("Hello, World!"))
 }
